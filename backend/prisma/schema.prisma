@@ -1,0 +1,234 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ──────────────────────────────────────────────────
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  series Series[]
+}
+
+// ─── Series ────────────────────────────────────────────────
+enum SeriesStatus {
+  DRAFT
+  GENERATING
+  IN_REVIEW
+  READY
+  PUBLISHING
+  PUBLISHED
+  FAILED
+}
+
+enum Tone {
+  DARK
+  LIGHT
+  COMEDIC
+  DRAMATIC
+  SUSPENSEFUL
+}
+
+model Series {
+  id          String       @id @default(uuid())
+  title       String
+  description String?      @db.Text
+  prompt      String       @db.Text
+  genre       String
+  tone        Tone         @default(DRAMATIC)
+  episodeCount Int         @default(5)
+  episodeDuration Int      @default(3) // minutes
+  storyline   String?      @db.Text
+  status      SeriesStatus @default(DRAFT)
+  userId      String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user       User          @relation(fields: [userId], references: [id])
+  episodes   Episode[]
+  characters Character[]
+  generationJobs GenerationJob[]
+  generationUsages GenerationUsage[]
+}
+
+// ─── Episode ───────────────────────────────────────────────
+enum EpisodeStatus {
+  DRAFT
+  GENERATING
+  IN_REVIEW
+  READY
+  PUBLISHING
+  PUBLISHED
+  FAILED
+}
+
+model Episode {
+  id          String        @id @default(uuid())
+  seriesId    String
+  number      Int
+  title       String
+  summary     String?       @db.Text
+  status      EpisodeStatus @default(DRAFT)
+  publishedAt DateTime?
+  platforms   String[]      // e.g. ["Web","iOS","Android","Roku"]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  series      Series        @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  scenes      Scene[]
+  script      Script?
+  mediaAssets MediaAsset[]
+}
+
+// ─── Character ─────────────────────────────────────────────
+model Character {
+  id          String  @id @default(uuid())
+  seriesId    String
+  name        String
+  age         Int?
+  gender      String?
+  role        String?
+  personality String? @db.Text
+  appearance  String? @db.Text
+  background  String? @db.Text
+  description String? @db.Text
+  isLocked    Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  series      Series   @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  relationshipsFrom CharacterRelationship[] @relation("FromCharacter")
+  relationshipsTo   CharacterRelationship[] @relation("ToCharacter")
+}
+
+// ─── Character Relationship ────────────────────────────────
+model CharacterRelationship {
+  id              String    @id @default(uuid())
+  fromCharacterId String
+  toCharacterId   String
+  relationship    String    // e.g. "loves", "hides secret from"
+  createdAt       DateTime  @default(now())
+
+  fromCharacter   Character @relation("FromCharacter", fields: [fromCharacterId], references: [id], onDelete: Cascade)
+  toCharacter     Character @relation("ToCharacter", fields: [toCharacterId], references: [id], onDelete: Cascade)
+
+  @@unique([fromCharacterId, toCharacterId])
+}
+
+// ─── Scene ─────────────────────────────────────────────────
+model Scene {
+  id          String   @id @default(uuid())
+  episodeId   String
+  number      Int
+  title       String?
+  location    String?
+  action      String?  @db.Text
+  dialogue    String?  @db.Text
+  camera      String?
+  mood        String?
+  characters  String[] // character names
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  episode     Episode  @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  mediaAssets MediaAsset[]
+}
+
+// ─── Script ────────────────────────────────────────────────
+model Script {
+  id        String   @id @default(uuid())
+  episodeId String   @unique
+  content   String   @db.Text
+  version   Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  episode   Episode  @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+}
+
+// ─── Media Asset ───────────────────────────────────────────
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  THUMBNAIL
+}
+
+enum MediaStatus {
+  UPLOADING
+  READY
+  FAILED
+}
+
+model MediaAsset {
+  id        String      @id @default(uuid())
+  episodeId String?
+  sceneId   String?
+  type      MediaType   @default(IMAGE)
+  url       String
+  publicId  String?
+  provider  String      @default("cloudinary")
+  status    MediaStatus @default(READY)
+  filename  String?
+  createdAt DateTime    @default(now())
+
+  episode   Episode?    @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  scene     Scene?      @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+}
+
+// ─── Generation Job ────────────────────────────────────────
+enum GenerationStatus {
+  QUEUED
+  GENERATING
+  COMPLETED
+  FAILED
+}
+
+enum GenerationType {
+  SERIES
+  EPISODE
+  CHARACTER
+  SCENE
+  SCRIPT
+}
+
+model GenerationJob {
+  id          String           @id @default(uuid())
+  seriesId    String
+  type        GenerationType
+  targetId    String?          // id of the specific entity being generated
+  status      GenerationStatus @default(QUEUED)
+  progress    Int              @default(0) // 0-100
+  steps       Json?            // progress steps
+  error       String?          @db.Text
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  completedAt DateTime?
+
+  series      Series           @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+}
+
+// ─── Generation Usage / Cost ───────────────────────────────
+model GenerationUsage {
+  id              String         @id @default(uuid())
+  seriesId        String
+  type            GenerationType
+  targetId        String?
+  promptTokens    Int            @default(0)
+  completionTokens Int           @default(0)
+  totalTokens     Int            @default(0)
+  estimatedCost   Float          @default(0)
+  model           String         @default("gpt-4o-mini")
+  createdAt       DateTime       @default(now())
+
+  series          Series         @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+}

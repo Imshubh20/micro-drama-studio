@@ -1,0 +1,507 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   MICRO DRAMA STUDIO — Premium Design System
+   ═══════════════════════════════════════════════════════════ */
+
+/* ──── Color Tokens (Dark — default) ──────────────────────── */
+:root {
+  --violet: #8b5cf6;
+  --violet-deep: #7c3aed;
+  --violet-glow: rgba(139, 92, 246, 0.35);
+  --coral: #f472b6;
+  --coral-glow: rgba(244, 114, 182, 0.2);
+  --cyan: #22d3ee;
+  --cyan-glow: rgba(34, 211, 238, 0.15);
+  --blue: #60a5fa;
+
+  --canvas: #07080f;
+  --canvas-2: #0c0e18;
+  --surface: #12141f;
+  --surface-raised: #1a1c2e;
+  --surface-soft: #1e2038;
+  --surface-glass: rgba(18, 20, 34, 0.65);
+
+  --ink: #f1f5f9;
+  --ink-muted: #8b94a6;
+  --ink-faint: #4b5268;
+
+  --line: rgba(148, 163, 196, 0.1);
+  --line-strong: rgba(148, 163, 196, 0.22);
+
+  --green: #34d399;
+  --amber: #fbbf24;
+  --danger: #fb7185;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 60px rgba(139, 92, 246, 0.12);
+
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+}
+
+/* ──── Color Tokens (Light theme) ─────────────────────────── */
+:root[data-theme="light"] {
+  --violet: #7c3aed;
+  --violet-deep: #6d28d9;
+  --violet-glow: rgba(124, 58, 237, 0.15);
+  --coral: #ec4899;
+  --coral-glow: rgba(236, 72, 153, 0.1);
+  --cyan: #0891b2;
+  --cyan-glow: rgba(8, 145, 178, 0.08);
+  --blue: #3b82f6;
+
+  --canvas: #f8fafc;
+  --canvas-2: #f1f5f9;
+  --surface: #ffffff;
+  --surface-raised: #f8fafc;
+  --surface-soft: #f1f5f9;
+  --surface-glass: rgba(255, 255, 255, 0.72);
+
+  --ink: #0f172a;
+  --ink-muted: #64748b;
+  --ink-faint: #94a3b8;
+
+  --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16);
+
+  --green: #059669;
+  --amber: #d97706;
+  --danger: #e11d48;
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.06);
+}
+
+/* ──── Base Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  border-color: var(--line);
+}
+
+html {
+  background: var(--canvas);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease,
+    border-color 180ms ease, color 180ms ease, opacity 180ms ease;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+a {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+/* ──── Shell & Layout ─────────────────────────────────────── */
+.studio-shell {
+  background: var(--canvas);
+  position: relative;
+}
+
+.studio-main {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% -10%, var(--violet-glow), transparent),
+    radial-gradient(ellipse 50% 40% at 10% 100%, var(--cyan-glow), transparent),
+    radial-gradient(ellipse 40% 30% at 50% 40%, var(--coral-glow), transparent),
+    var(--canvas);
+  animation: page-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ──── Panel / Card System ────────────────────────────────── */
+.studio-panel {
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms ease,
+    border-color 280ms ease;
+}
+
+.studio-raised {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* ──── Input / Field System ───────────────────────────────── */
+.studio-field {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 0.625rem;
+  color: var(--ink);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.studio-field::placeholder {
+  color: var(--ink-muted);
+  opacity: 0.6;
+}
+
+.studio-field:hover {
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+
+.studio-field:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px var(--violet-glow), 0 8px 24px rgba(0, 0, 0, 0.1);
+  outline: 0;
+  background: var(--surface);
+}
+
+/* ──── Button System ──────────────────────────────────────── */
+.studio-button {
+  display: inline-flex;
+  min-height: 2.625rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.625rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.studio-button-primary {
+  background: linear-gradient(135deg, var(--violet-deep), var(--violet));
+  color: white;
+  box-shadow: 0 4px 16px var(--violet-glow), var(--shadow-sm);
+}
+
+.studio-button-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--violet-glow), var(--shadow);
+  filter: brightness(1.1);
+}
+
+.studio-button-secondary {
+  border: 1px solid var(--line-strong);
+  background: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  color: var(--ink);
+}
+
+.studio-button-secondary:hover:not(:disabled),
+.studio-button-ghost:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--surface-soft);
+  border-color: var(--line-strong);
+}
+
+.studio-button-ai {
+  background: linear-gradient(135deg, var(--violet-deep), #9333ea, var(--coral));
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  color: white;
+  box-shadow: 0 4px 20px var(--violet-glow);
+}
+
+.studio-icon-button {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 0.625rem;
+  color: var(--ink-muted);
+  transition: all 200ms ease;
+}
+
+.studio-icon-button:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--surface-soft);
+  transform: translateY(-1px);
+}
+
+/* ──── Decorative / Typography ────────────────────────────── */
+.eyebrow {
+  color: var(--violet);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.studio-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+}
+
+/* ──── Skeleton Loading ───────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-soft) 0%,
+    var(--surface-raised) 40%,
+    var(--surface-soft) 80%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease infinite;
+  border-radius: var(--radius);
+}
+
+/* ──── Cover / Hero Cards ─────────────────────────────────── */
+.cover {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cover::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(180deg, transparent 20%, rgba(7, 8, 15, 0.88));
+}
+
+.cover-romance {
+  background: linear-gradient(135deg, #4c1d95 0%, #9333ea 40%, #ec4899 100%);
+}
+
+.cover-mystery {
+  background: linear-gradient(135deg, #0c1445 0%, #1e40af 45%, #3b82f6 100%);
+}
+
+.cover-drama {
+  background: linear-gradient(135deg, #4a1a2e 0%, #9f1239 45%, #f97316 100%);
+}
+
+.cover-default {
+  background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #7c3aed 100%);
+}
+
+.cover-mark {
+  position: absolute;
+  right: -1rem;
+  top: -2rem;
+  color: rgba(255, 255, 255, 0.06);
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ──── Modal ──────────────────────────────────────────────── */
+.modal-backdrop {
+  animation: fade-in 200ms ease both;
+}
+
+.modal-panel {
+  animation: modal-in 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ──── 3D Canvas Container ────────────────────────────────── */
+.three-canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.three-canvas-container canvas {
+  pointer-events: none;
+}
+
+/* ──── Stat Card Glow ─────────────────────────────────────── */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--violet), transparent);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+/* ──── Series Card Hover Glow ─────────────────────────────── */
+.series-card {
+  position: relative;
+}
+
+.series-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--violet-glow), transparent, var(--coral-glow));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.series-card:hover::after {
+  opacity: 1;
+}
+
+/* ──── Progress Bar ───────────────────────────────────────── */
+.progress-bar {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-soft);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--violet), var(--coral));
+  transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s ease infinite;
+  background-size: 200% 100%;
+}
+
+/* ──── Hover Interactions ─────────────────────────────────── */
+@media (hover: hover) {
+  .studio-panel:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow), var(--shadow-glow);
+  }
+
+  .studio-panel:hover .cover-mark {
+    transform: rotate(-8deg) scale(1.1);
+  }
+}
+
+/* ──── Keyframes ──────────────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--violet-glow); }
+  50% { box-shadow: 0 0 40px var(--violet-glow); }
+}
+
+/* ──── Reduced Motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ──── Mobile Bottom Nav Space ────────────────────────────── */
+@media (max-width: 767px) {
+  .studio-main {
+    padding-bottom: 5.5rem;
+  }
+}
