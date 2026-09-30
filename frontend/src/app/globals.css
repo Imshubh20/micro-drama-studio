@@ -15,11 +15,11 @@
   --cyan-glow: rgba(34, 211, 238, 0.15);
   --blue: #60a5fa;
 
-  --canvas: #07080f;
+  --canvas: #070e0f;
   --canvas-2: #0c0e18;
   --surface: #12141f;
   --surface-raised: #1a1c2e;
-  --surface-soft: #1e2038;
+  --surface-soft: #1e3825;
   --surface-glass: rgba(18, 20, 34, 0.65);
 
   --ink: #f1f5f9;
@@ -99,7 +99,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   font: inherit;
 }
 
@@ -285,12 +288,10 @@ a {
 
 /* ──── Skeleton Loading ───────────────────────────────────── */
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--surface-soft) 0%,
-    var(--surface-raised) 40%,
-    var(--surface-soft) 80%
-  );
+  background: linear-gradient(90deg,
+      var(--surface-soft) 0%,
+      var(--surface-raised) 40%,
+      var(--surface-soft) 80%);
   background-size: 200% 100%;
   animation: shimmer 1.6s ease infinite;
   border-radius: var(--radius);
@@ -437,8 +438,13 @@ a {
 
 /* ──── Keyframes ──────────────────────────────────────────── */
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes page-in {
@@ -446,6 +452,7 @@ a {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -453,8 +460,13 @@ a {
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes modal-in {
@@ -462,6 +474,7 @@ a {
     opacity: 0;
     transform: translateY(16px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -469,27 +482,56 @@ a {
 }
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px var(--violet-glow); }
-  50% { box-shadow: 0 0 40px var(--violet-glow); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--violet-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 40px var(--violet-glow);
+  }
 }
 
 /* ──── Reduced Motion ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
